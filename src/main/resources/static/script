@@ -1,0 +1,174 @@
+$.ajax({ 
+    type: "GET", 
+    url: "/extensions", 
+    success: (data) => { 
+      console.log(data); 
+      //$('.string').html(JSON.stringify(data));
+      
+      fn_searchAll(data);
+    },
+    error: (request, status, error) => {
+        alert("code: " + status + "\n" + "error: " + error)
+    }
+});
+
+// ### 초기진입 화면 셋팅
+function fn_searchAll(data){
+
+    //1~7 고정 확장자 필터
+    var fixEx = new Array();
+    fixEx = data;
+    fixEx = fixEx.filter(value => {
+        if (value.seq > 0 && value.seq < 8 && value.flag === "Y"){
+            return value;
+        }
+    });
+
+    fixEx.forEach(element => {
+        $("#"+element.seq).prop("checked", true);
+    });
+
+    //8~200 커스텀 확장자 필터
+    var varEx = new Array();
+    varEx = data;
+    varEx = varEx.filter(value => {
+        if (value.seq > 7 && value.seq <= 200 && value.flag === "E"){
+            return value;
+        }
+    });
+
+    varEx.forEach(element => {
+        $("#smallboxs").append("<div class='smallbox'>" + element.text 
+                                + "<button class='close' id=" + element.seq + " onclick='fn_clickDelete(this)'></button></div>");
+    });
+
+    //카운트 넣기
+    $("#count").text(varEx.length + "/200");
+
+    console.log(fixEx);
+    console.log(varEx);
+}
+
+// ### 체크박스 업데이트
+function fn_checkboxUpdate(checkbox){
+    
+    var seq = checkbox.id;
+    var text = checkbox.value;
+    var flag = checkbox.checked == true ? "Y" : "N";
+
+    var jsonData = {
+        "seq" : seq,
+        "text" : text,
+        "flag" : flag
+    }
+
+    console.log(jsonData);
+    
+    $.ajax({ 
+        type: "PUT", 
+        url: "/extension/" + seq, 
+        contentType:'application/json;charset=utf-8',
+        dataType:'json',
+        data: JSON.stringify(jsonData),
+        success: (data) => { 
+          console.log(data); 
+        },
+        error: (request, status, error) => {
+            alert("code: " + status + "\n" + "error: " + error)
+            //체크박스 원상복구
+            $("#"+checkbox.id).prop("checked", checkbox.checked == true ? false : true);
+        }
+    });
+}
+
+// input text 영문만 입력
+$(document).on("keyup", "#exText", function() {$(this).val( $(this).val().replace(/[0-9]|[^\a-z]/gi,"") );});
+
+// ### 추가 버튼 클릭
+function fn_clickAdd(){
+    var exText = $("#exText").val();
+    //console.log(exText);
+
+    var count = $("#count").text();
+    count = count.split('/');
+
+    if (Number(count[0]) >= 200){
+        alert("200개가 초과되었습니다.");
+        return;
+    }
+
+    if (exText.length < 1 || exText.length > 20){
+        alert("1~20 사이의 영문으로 작성해주세요.");
+        return;
+    }
+
+    $.ajax({ 
+        type: "POST", 
+        url: "/extension/" + exText,
+        success: (data) => { 
+            console.log(data); 
+
+            $("#smallboxs").append("<div class='smallbox'>" + data.text 
+                                + "<button class='close' id=" + data.seq + " onclick='fn_clickDelete(this)'></button></div>");
+
+            //카운트 넣기        
+            $("#count").text((Number(count[0]) + 1) + "/200");
+        },
+        error: (request, status, error) => {
+            alert("code: " + status + "\n" + "error: 이미 존재하는 확장자이거나 추가 갯수가 초과 되었습니다.")                        
+        }
+    });
+}
+
+// ### 삭제버튼 클릭
+function fn_clickDelete(button){
+    var seq = button.id;
+
+    var count = $("#count").text();
+    count = count.split('/');
+
+    console.log(seq);
+    
+    $.ajax({ 
+        type: "DELETE", 
+        url: "/extension/" + seq, 
+        success: (data) => { 
+            console.log(data);
+            $("#"+seq).parent().remove();
+            $("#"+seq).remove();    
+
+            //카운트 넣기        
+            $("#count").text((Number(count[0]) - 1) + "/200");
+        },
+        error: (request, status, error) => {
+            alert("code: " + status + "\n" + "error: " + error)
+        }
+    });
+
+}
+
+// ### 제출 버튼
+function fn_fileUpload(){
+
+    var form = $("#fileForm");
+    var formData = new FormData(form[0]);
+
+    $.ajax({
+        type: "POST",
+        url: "/file",
+        data : formData,
+        contentType : false,
+        processData : false,
+        success: function(data){
+            if (data.result === "SUCCESS"){
+                alert("확장자 체크에 이상이 없습니다.");  
+            } else {
+                alert(data.reason);  
+            }                      
+        },
+        error: (request, status, error) => {
+            alert("code: " + status + "\n" + "error: 파일전송 실패 " + request.reason);
+        }
+    });
+    return false;
+};

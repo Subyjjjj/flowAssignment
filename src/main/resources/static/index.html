@@ -1,0 +1,66 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+  <head> 
+    <meta charset="UTF-8"> 
+    <title>Flow Assignment</title> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+    <script src="script"></script> 
+    <style type="text/css">
+      .box {
+        margin-top : 10px; 
+        padding : 5px;
+        border : 1px solid black;
+        border-radius : 5px;
+        width: 400px;
+        min-height: 250px;
+      }
+
+      .smallbox {
+        display: inline-block;
+        margin : 3px; 
+        padding : 5px;
+        border : 1px solid black;
+        border-radius : 5px;
+        font-size: small;
+      }
+
+      .close {display:inline-block;*display:inline; margin-left: 5px;} 
+      .close:after {display: inline-block;content: "\00d7"; font-size:10pt;}
+    </style>
+  </head> 
+
+    <body> 
+      <hr>
+      <h1>◎ 파일 확장자 차단</h1>
+      <hr> 
+      <h4>파일 확장자에 따라 특정 형식의 파일을 첨부하거나 전송하지 못하도록 제한</h2>
+      <div style="float: left; margin-bottom: 20px;">
+        <span style="float: left; width: 150px;"><b>고정 확장자</b></span>
+        <label><input type="checkbox" id="1" value="bat" onchange="fn_checkboxUpdate(this)"> bat</label>
+        <label><input type="checkbox" id="2" value="cmd" onchange="fn_checkboxUpdate(this)"> cmd</label>
+        <label><input type="checkbox" id="3" value="com" onchange="fn_checkboxUpdate(this)"> com</label>
+        <label><input type="checkbox" id="4" value="cpl" onchange="fn_checkboxUpdate(this)"> cpl</label>
+        <label><input type="checkbox" id="5" value="exe" onchange="fn_checkboxUpdate(this)"> exe</label>
+        <label><input type="checkbox" id="6" value="scr" onchange="fn_checkboxUpdate(this)"> scr</label>
+        <label><input type="checkbox" id="7" value="js" onchange="fn_checkboxUpdate(this)"> js</label>
+      </div>
+      <div style="clear:both;">
+        <span style="float: left; width: 150px;"><b>커스텀 확장자</b></span>
+        <div style="float: left;">
+          <input style="width: 200px;" type="text" id="exText" placeholder="확장자 입력" maxlength="20">
+          <button style="width: 60px; height: auto;" onclick="fn_clickAdd()">+추가</button>
+          <div class="box">
+            <span style="font-size: small; margin-left: 10px;" id="count">0/200</span>
+            <div id="smallboxs">
+              <!-- <div class="smallbox" >sh<button class="close"></button></div> -->
+            </div>
+          </div>
+        </div>        
+      </div> 
+      <form id="fileForm" method="post" enctype="multipart/form-data">
+        <input type="file" name="uploadFile" multiple="multiple" style="clear:both; float: left; width: 200px; height: auto; margin-left: 150px; margin-top: 20px;"></input>
+        <button type="button" style="float: left; width: 80px; height: auto; margin-left: 10px; margin-top: 20px;" onclick="fn_fileUpload()">완료</button>
+      </form>
+    </body> 
+    
+</html>
