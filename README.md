@@ -11,6 +11,12 @@
 6. JPA
 7. springboot 2.6
 
+DB - extansion(table)
+-------------
+1. seq(int) - PK
+2. text(varchar20) - 확장자명
+3. flag(varchar1) - 확장자 구분 : 고정 확장자(Y, N) : 가변 확장자(E) 
+
 배포
 -------------
 AWS EC2 : http://3.38.245.185:8080/
