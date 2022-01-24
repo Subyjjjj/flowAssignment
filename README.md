@@ -6,7 +6,7 @@
 1. JAVA11
 2. Jquery
 3. Mysql (8버전)
-4. vscode (IDE)
+4. vscode
 5. gardle
 6. JPA
 7. springboot 2.6
