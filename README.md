@@ -19,4 +19,4 @@ DB - extansion(table)
 
 배포
 -------------
-AWS EC2(amazon linux 운영체제) : http://3.38.245.185:8080/
+AWS EC2(amazon linux 운영체제) : http://3.38.245.185:8080/ (2022-01-28 EC2 서비스 중지)
