@@ -1,12 +1,12 @@
 # flowAssignment
-플로우 채용 개발과제
+JPA를 이용한 JAVA 연습, 파일 업로드 + EC2 배포 테스트
 
 개발 환경
 -------------
 1. JAVA11
 2. Jquery
 3. Mysql (8버전)
-4. vscode
+4. vscode(IDE)
 5. gardle
 6. JPA
 7. springboot 2.6
